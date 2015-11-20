@@ -1,0 +1,606 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="SundaySchoolRegistryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ClassRoomCourses">
+          <Key>
+            <PropertyRef Name="CourseId" />
+            <PropertyRef Name="ClassRoomId" />
+          </Key>
+          <Property Name="CourseId" Type="int" Nullable="false" />
+          <Property Name="ClassRoomId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ClassRooms">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="RoomNumber" Type="nvarchar" MaxLength="5" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="CourseAttendencies">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StudentId" Type="int" Nullable="false" />
+          <Property Name="CourseId" Type="int" Nullable="false" />
+          <Property Name="CheckinDate" Type="datetime" Nullable="false" />
+          <Property Name="CheckoutDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Courses">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="250" />
+          <Property Name="StartHour" Type="datetime" Nullable="false" />
+          <Property Name="EndHour" Type="datetime" Nullable="false" />
+          <Property Name="MinimumAge" Type="int" Nullable="false" />
+          <Property Name="MaximumAge" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="DayOfWeek" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CourseTeachers">
+          <Key>
+            <PropertyRef Name="TeacherId" />
+            <PropertyRef Name="CourseId" />
+          </Key>
+          <Property Name="TeacherId" Type="int" Nullable="false" />
+          <Property Name="CourseId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Guardian">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CellNumber" Type="nvarchar" MaxLength="13" Nullable="false" />
+          <Property Name="HomeNumber" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="GuardianStudents">
+          <Key>
+            <PropertyRef Name="GuardianId" />
+            <PropertyRef Name="StudentId" />
+          </Key>
+          <Property Name="GuardianId" Type="int" Nullable="false" />
+          <Property Name="StudentId" Type="int" Nullable="false" />
+          <Property Name="GuardianTypeId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="GuardianType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Students">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DateBirth" Type="date" Nullable="false" />
+          <Property Name="Allergies" Type="nvarchar" MaxLength="200" />
+          <Property Name="SpecialInstructions" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="Teachers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <Association Name="FK_ClassRoomCourses_ClassRooms">
+          <End Role="ClassRooms" Type="Self.ClassRooms" Multiplicity="1" />
+          <End Role="ClassRoomCourses" Type="Self.ClassRoomCourses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClassRooms">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ClassRoomCourses">
+              <PropertyRef Name="CourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ClassRoomCourses_Courses">
+          <End Role="Courses" Type="Self.Courses" Multiplicity="1" />
+          <End Role="ClassRoomCourses" Type="Self.ClassRoomCourses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Courses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ClassRoomCourses">
+              <PropertyRef Name="ClassRoomId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CourseAttendencies_Courses">
+          <End Role="Courses" Type="Self.Courses" Multiplicity="1" />
+          <End Role="CourseAttendencies" Type="Self.CourseAttendencies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Courses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CourseAttendencies">
+              <PropertyRef Name="CourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CourseAttendencies_Students">
+          <End Role="Students" Type="Self.Students" Multiplicity="1" />
+          <End Role="CourseAttendencies" Type="Self.CourseAttendencies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Students">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CourseAttendencies">
+              <PropertyRef Name="StudentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CourseTeachers_Courses">
+          <End Role="Courses" Type="Self.Courses" Multiplicity="1" />
+          <End Role="CourseTeachers" Type="Self.CourseTeachers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Courses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CourseTeachers">
+              <PropertyRef Name="CourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CourseTeachers_Teachers">
+          <End Role="Teachers" Type="Self.Teachers" Multiplicity="1" />
+          <End Role="CourseTeachers" Type="Self.CourseTeachers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teachers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CourseTeachers">
+              <PropertyRef Name="TeacherId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GuardianStudents_Guardian">
+          <End Role="Guardian" Type="Self.Guardian" Multiplicity="1" />
+          <End Role="GuardianStudents" Type="Self.GuardianStudents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Guardian">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GuardianStudents">
+              <PropertyRef Name="GuardianId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GuardianStudents_GuardianType">
+          <End Role="GuardianType" Type="Self.GuardianType" Multiplicity="1" />
+          <End Role="GuardianStudents" Type="Self.GuardianStudents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GuardianType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GuardianStudents">
+              <PropertyRef Name="GuardianTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GuardianStudents_Students">
+          <End Role="Students" Type="Self.Students" Multiplicity="1" />
+          <End Role="GuardianStudents" Type="Self.GuardianStudents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Students">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GuardianStudents">
+              <PropertyRef Name="StudentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SundaySchoolRegistryModelStoreContainer">
+          <EntitySet Name="ClassRoomCourses" EntityType="Self.ClassRoomCourses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ClassRooms" EntityType="Self.ClassRooms" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CourseAttendencies" EntityType="Self.CourseAttendencies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Courses" EntityType="Self.Courses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CourseTeachers" EntityType="Self.CourseTeachers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Guardian" EntityType="Self.Guardian" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GuardianStudents" EntityType="Self.GuardianStudents" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GuardianType" EntityType="Self.GuardianType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Students" EntityType="Self.Students" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Teachers" EntityType="Self.Teachers" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_ClassRoomCourses_ClassRooms" Association="Self.FK_ClassRoomCourses_ClassRooms">
+            <End Role="ClassRooms" EntitySet="ClassRooms" />
+            <End Role="ClassRoomCourses" EntitySet="ClassRoomCourses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ClassRoomCourses_Courses" Association="Self.FK_ClassRoomCourses_Courses">
+            <End Role="Courses" EntitySet="Courses" />
+            <End Role="ClassRoomCourses" EntitySet="ClassRoomCourses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CourseAttendencies_Courses" Association="Self.FK_CourseAttendencies_Courses">
+            <End Role="Courses" EntitySet="Courses" />
+            <End Role="CourseAttendencies" EntitySet="CourseAttendencies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CourseAttendencies_Students" Association="Self.FK_CourseAttendencies_Students">
+            <End Role="Students" EntitySet="Students" />
+            <End Role="CourseAttendencies" EntitySet="CourseAttendencies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CourseTeachers_Courses" Association="Self.FK_CourseTeachers_Courses">
+            <End Role="Courses" EntitySet="Courses" />
+            <End Role="CourseTeachers" EntitySet="CourseTeachers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CourseTeachers_Teachers" Association="Self.FK_CourseTeachers_Teachers">
+            <End Role="Teachers" EntitySet="Teachers" />
+            <End Role="CourseTeachers" EntitySet="CourseTeachers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GuardianStudents_Guardian" Association="Self.FK_GuardianStudents_Guardian">
+            <End Role="Guardian" EntitySet="Guardian" />
+            <End Role="GuardianStudents" EntitySet="GuardianStudents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GuardianStudents_GuardianType" Association="Self.FK_GuardianStudents_GuardianType">
+            <End Role="GuardianType" EntitySet="GuardianType" />
+            <End Role="GuardianStudents" EntitySet="GuardianStudents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GuardianStudents_Students" Association="Self.FK_GuardianStudents_Students">
+            <End Role="Students" EntitySet="Students" />
+            <End Role="GuardianStudents" EntitySet="GuardianStudents" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SundaySchoolRegistryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ClassRoom">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoomNumber" Type="String" MaxLength="5" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Courses" Relationship="Self.ClassRoomCourses" FromRole="ClassRooms" ToRole="Courses" />
+        </EntityType>
+        <EntityType Name="CourseAttendency">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StudentId" Type="Int32" Nullable="false" />
+          <Property Name="CourseId" Type="Int32" Nullable="false" />
+          <Property Name="CheckinDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CheckoutDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Cours" Relationship="Self.FK_CourseAttendencies_Courses" FromRole="CourseAttendencies" ToRole="Courses" />
+          <NavigationProperty Name="Student" Relationship="Self.FK_CourseAttendencies_Students" FromRole="CourseAttendencies" ToRole="Students" />
+        </EntityType>
+        <EntityType Name="Cours">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="StartHour" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndHour" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="MinimumAge" Type="Int32" Nullable="false" />
+          <Property Name="MaximumAge" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="DayOfWeek" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CourseAttendencies" Relationship="Self.FK_CourseAttendencies_Courses" FromRole="Courses" ToRole="CourseAttendencies" />
+          <NavigationProperty Name="ClassRooms" Relationship="Self.ClassRoomCourses" FromRole="Courses" ToRole="ClassRooms" />
+          <NavigationProperty Name="Teachers" Relationship="Self.CourseTeachers" FromRole="Courses" ToRole="Teachers" />
+        </EntityType>
+        <EntityType Name="GuardianStudent">
+          <Key>
+            <PropertyRef Name="GuardianId" />
+            <PropertyRef Name="StudentId" />
+          </Key>
+          <Property Name="GuardianId" Type="Int32" Nullable="false" />
+          <Property Name="StudentId" Type="Int32" Nullable="false" />
+          <Property Name="GuardianTypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="GuardianType" Relationship="Self.FK_GuardianStudents_GuardianType" FromRole="GuardianStudents" ToRole="GuardianType" />
+          <NavigationProperty Name="Student" Relationship="Self.FK_GuardianStudents_Students" FromRole="GuardianStudents" ToRole="Students" />
+          <NavigationProperty Name="Guardian" Relationship="SundaySchoolRegistryModel.FK_GuardianStudents_Guardian" FromRole="GuardianStudent" ToRole="Guardian" />
+        </EntityType>
+        <EntityType Name="GuardianType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="GuardianStudents" Relationship="Self.FK_GuardianStudents_GuardianType" FromRole="GuardianType" ToRole="GuardianStudents" />
+        </EntityType>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DateBirth" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Allergies" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SpecialInstructions" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CourseAttendencies" Relationship="Self.FK_CourseAttendencies_Students" FromRole="Students" ToRole="CourseAttendencies" />
+          <NavigationProperty Name="GuardianStudents" Relationship="Self.FK_GuardianStudents_Students" FromRole="Students" ToRole="GuardianStudents" />
+        </EntityType>
+        <EntityType Name="Teacher">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Courses" Relationship="Self.CourseTeachers" FromRole="Teachers" ToRole="Courses" />
+        </EntityType>
+        <Association Name="FK_CourseAttendencies_Courses">
+          <End Role="Courses" Type="Self.Cours" Multiplicity="1" />
+          <End Role="CourseAttendencies" Type="Self.CourseAttendency" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Courses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CourseAttendencies">
+              <PropertyRef Name="CourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CourseAttendencies_Students">
+          <End Role="Students" Type="Self.Student" Multiplicity="1" />
+          <End Role="CourseAttendencies" Type="Self.CourseAttendency" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Students">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CourseAttendencies">
+              <PropertyRef Name="StudentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GuardianStudents_GuardianType">
+          <End Role="GuardianType" Type="Self.GuardianType" Multiplicity="1" />
+          <End Role="GuardianStudents" Type="Self.GuardianStudent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GuardianType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GuardianStudents">
+              <PropertyRef Name="GuardianTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GuardianStudents_Students">
+          <End Role="Students" Type="Self.Student" Multiplicity="1" />
+          <End Role="GuardianStudents" Type="Self.GuardianStudent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Students">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GuardianStudents">
+              <PropertyRef Name="StudentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClassRoomCourses">
+          <End Role="ClassRooms" Type="Self.ClassRoom" Multiplicity="*" />
+          <End Role="Courses" Type="Self.Cours" Multiplicity="*" />
+        </Association>
+        <Association Name="CourseTeachers">
+          <End Role="Courses" Type="Self.Cours" Multiplicity="*" />
+          <End Role="Teachers" Type="Self.Teacher" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="SundaySchoolRegistryContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ClassRooms" EntityType="Self.ClassRoom" />
+          <EntitySet Name="CourseAttendencies" EntityType="Self.CourseAttendency" />
+          <EntitySet Name="Courses" EntityType="Self.Cours" />
+          <EntitySet Name="GuardianStudents" EntityType="Self.GuardianStudent" />
+          <EntitySet Name="GuardianTypes" EntityType="Self.GuardianType" />
+          <EntitySet Name="Students" EntityType="Self.Student" />
+          <EntitySet Name="Teachers" EntityType="Self.Teacher" />
+          <AssociationSet Name="FK_CourseAttendencies_Courses" Association="Self.FK_CourseAttendencies_Courses">
+            <End Role="Courses" EntitySet="Courses" />
+            <End Role="CourseAttendencies" EntitySet="CourseAttendencies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CourseAttendencies_Students" Association="Self.FK_CourseAttendencies_Students">
+            <End Role="Students" EntitySet="Students" />
+            <End Role="CourseAttendencies" EntitySet="CourseAttendencies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GuardianStudents_GuardianType" Association="Self.FK_GuardianStudents_GuardianType">
+            <End Role="GuardianType" EntitySet="GuardianTypes" />
+            <End Role="GuardianStudents" EntitySet="GuardianStudents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GuardianStudents_Students" Association="Self.FK_GuardianStudents_Students">
+            <End Role="Students" EntitySet="Students" />
+            <End Role="GuardianStudents" EntitySet="GuardianStudents" />
+          </AssociationSet>
+          <AssociationSet Name="ClassRoomCourses" Association="Self.ClassRoomCourses">
+            <End Role="ClassRooms" EntitySet="ClassRooms" />
+            <End Role="Courses" EntitySet="Courses" />
+          </AssociationSet>
+          <AssociationSet Name="CourseTeachers" Association="Self.CourseTeachers">
+            <End Role="Courses" EntitySet="Courses" />
+            <End Role="Teachers" EntitySet="Teachers" />
+          </AssociationSet>
+          <EntitySet Name="Guardians" EntityType="SundaySchoolRegistryModel.Guardian" />
+          <AssociationSet Name="FK_GuardianStudents_Guardian" Association="SundaySchoolRegistryModel.FK_GuardianStudents_Guardian">
+            <End Role="Guardian" EntitySet="Guardians" />
+            <End Role="GuardianStudent" EntitySet="GuardianStudents" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Guardian">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CellNumber" Type="String" Nullable="false" MaxLength="13" FixedLength="false" Unicode="true" />
+          <Property Name="HomeNumber" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="GuardianStudents" Relationship="SundaySchoolRegistryModel.FK_GuardianStudents_Guardian" FromRole="Guardian" ToRole="GuardianStudent" />
+        </EntityType>
+        <Association Name="FK_GuardianStudents_Guardian">
+          <End Type="SundaySchoolRegistryModel.Guardian" Role="Guardian" Multiplicity="1" />
+          <End Type="SundaySchoolRegistryModel.GuardianStudent" Role="GuardianStudent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Guardian">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GuardianStudent">
+              <PropertyRef Name="GuardianId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SundaySchoolRegistryModelStoreContainer" CdmEntityContainer="SundaySchoolRegistryContext">
+          <EntitySetMapping Name="ClassRooms">
+            <EntityTypeMapping TypeName="SundaySchoolRegistryModel.ClassRoom">
+              <MappingFragment StoreEntitySet="ClassRooms">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="RoomNumber" ColumnName="RoomNumber" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CourseAttendencies">
+            <EntityTypeMapping TypeName="SundaySchoolRegistryModel.CourseAttendency">
+              <MappingFragment StoreEntitySet="CourseAttendencies">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+                <ScalarProperty Name="CourseId" ColumnName="CourseId" />
+                <ScalarProperty Name="CheckinDate" ColumnName="CheckinDate" />
+                <ScalarProperty Name="CheckoutDate" ColumnName="CheckoutDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Courses">
+            <EntityTypeMapping TypeName="SundaySchoolRegistryModel.Cours">
+              <MappingFragment StoreEntitySet="Courses">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="StartHour" ColumnName="StartHour" />
+                <ScalarProperty Name="EndHour" ColumnName="EndHour" />
+                <ScalarProperty Name="MinimumAge" ColumnName="MinimumAge" />
+                <ScalarProperty Name="MaximumAge" ColumnName="MaximumAge" />
+                <ScalarProperty Name="DayOfWeek" ColumnName="DayOfWeek" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GuardianStudents">
+            <EntityTypeMapping TypeName="SundaySchoolRegistryModel.GuardianStudent">
+              <MappingFragment StoreEntitySet="GuardianStudents">
+                <ScalarProperty Name="GuardianId" ColumnName="GuardianId" />
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+                <ScalarProperty Name="GuardianTypeId" ColumnName="GuardianTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GuardianTypes">
+            <EntityTypeMapping TypeName="SundaySchoolRegistryModel.GuardianType">
+              <MappingFragment StoreEntitySet="GuardianType">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Students">
+            <EntityTypeMapping TypeName="SundaySchoolRegistryModel.Student">
+              <MappingFragment StoreEntitySet="Students">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="DateBirth" ColumnName="DateBirth" />
+                <ScalarProperty Name="Allergies" ColumnName="Allergies" />
+                <ScalarProperty Name="SpecialInstructions" ColumnName="SpecialInstructions" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Teachers">
+            <EntityTypeMapping TypeName="SundaySchoolRegistryModel.Teacher">
+              <MappingFragment StoreEntitySet="Teachers">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="ClassRoomCourses" TypeName="SundaySchoolRegistryModel.ClassRoomCourses" StoreEntitySet="ClassRoomCourses">
+            <EndProperty Name="ClassRooms">
+              <ScalarProperty Name="Id" ColumnName="CourseId" />
+            </EndProperty>
+            <EndProperty Name="Courses">
+              <ScalarProperty Name="Id" ColumnName="ClassRoomId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="CourseTeachers" TypeName="SundaySchoolRegistryModel.CourseTeachers" StoreEntitySet="CourseTeachers">
+            <EndProperty Name="Courses">
+              <ScalarProperty Name="Id" ColumnName="CourseId" />
+            </EndProperty>
+            <EndProperty Name="Teachers">
+              <ScalarProperty Name="Id" ColumnName="TeacherId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="Guardians">
+            <EntityTypeMapping TypeName="SundaySchoolRegistryModel.Guardian">
+              <MappingFragment StoreEntitySet="Guardian">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="HomeNumber" ColumnName="HomeNumber" />
+                <ScalarProperty Name="CellNumber" ColumnName="CellNumber" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
