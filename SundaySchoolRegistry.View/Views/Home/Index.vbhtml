@@ -24,6 +24,6 @@ End Code
     <div class="col-md-4">
         <h2>Register Student</h2>
         <p>Etiam sodales massa ut dignissim tempor. Etiam iaculis nisl id scelerisque suscipit. Etiam quis interdum justo.</p>
-        <p><a class="btn btn-default" href="#">Next &raquo;</a></p>
+        <p><a class="btn btn-default" href="/Students/Create">Next &raquo;</a></p>
     </div>
 </div>

@@ -5,19 +5,11 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="SundaySchoolRegistryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="ClassRoomCourses">
-          <Key>
-            <PropertyRef Name="CourseId" />
-            <PropertyRef Name="ClassRoomId" />
-          </Key>
-          <Property Name="CourseId" Type="int" Nullable="false" />
-          <Property Name="ClassRoomId" Type="int" Nullable="false" />
-        </EntityType>
         <EntityType Name="ClassRooms">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RoomNumber" Type="nvarchar" MaxLength="5" Nullable="false" />
           <Property Name="Description" Type="nvarchar" MaxLength="250" />
         </EntityType>
@@ -36,23 +28,16 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Description" Type="nvarchar" MaxLength="250" />
           <Property Name="StartHour" Type="datetime" Nullable="false" />
           <Property Name="EndHour" Type="datetime" Nullable="false" />
           <Property Name="MinimumAge" Type="int" Nullable="false" />
-          <Property Name="MaximumAge" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="MaximumAge" Type="int" Nullable="false" />
           <Property Name="DayOfWeek" Type="nchar" MaxLength="10" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="CourseTeachers">
-          <Key>
-            <PropertyRef Name="TeacherId" />
-            <PropertyRef Name="CourseId" />
-          </Key>
+          <Property Name="ClassroomId" Type="int" Nullable="false" />
           <Property Name="TeacherId" Type="int" Nullable="false" />
-          <Property Name="CourseId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Guardian">
           <Key>
@@ -95,6 +80,7 @@
           <Property Name="DateBirth" Type="date" Nullable="false" />
           <Property Name="Allergies" Type="nvarchar" MaxLength="200" />
           <Property Name="SpecialInstructions" Type="nvarchar" MaxLength="500" />
+          <Property Name="CourseId" Type="int" />
         </EntityType>
         <EntityType Name="Teachers">
           <Key>
@@ -105,30 +91,6 @@
           <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" />
         </EntityType>
-        <Association Name="FK_ClassRoomCourses_ClassRooms">
-          <End Role="ClassRooms" Type="Self.ClassRooms" Multiplicity="1" />
-          <End Role="ClassRoomCourses" Type="Self.ClassRoomCourses" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ClassRooms">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ClassRoomCourses">
-              <PropertyRef Name="CourseId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ClassRoomCourses_Courses">
-          <End Role="Courses" Type="Self.Courses" Multiplicity="1" />
-          <End Role="ClassRoomCourses" Type="Self.ClassRoomCourses" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Courses">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ClassRoomCourses">
-              <PropertyRef Name="ClassRoomId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_CourseAttendencies_Courses">
           <End Role="Courses" Type="Self.Courses" Multiplicity="1" />
           <End Role="CourseAttendencies" Type="Self.CourseAttendencies" Multiplicity="*" />
@@ -153,26 +115,26 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_CourseTeachers_Courses">
-          <End Role="Courses" Type="Self.Courses" Multiplicity="1" />
-          <End Role="CourseTeachers" Type="Self.CourseTeachers" Multiplicity="*" />
+        <Association Name="FK_Courses_ClassRooms">
+          <End Role="ClassRooms" Type="Self.ClassRooms" Multiplicity="1" />
+          <End Role="Courses" Type="Self.Courses" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Courses">
+            <Principal Role="ClassRooms">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="CourseTeachers">
-              <PropertyRef Name="CourseId" />
+            <Dependent Role="Courses">
+              <PropertyRef Name="ClassroomId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_CourseTeachers_Teachers">
+        <Association Name="FK_Courses_Teachers">
           <End Role="Teachers" Type="Self.Teachers" Multiplicity="1" />
-          <End Role="CourseTeachers" Type="Self.CourseTeachers" Multiplicity="*" />
+          <End Role="Courses" Type="Self.Courses" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Teachers">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="CourseTeachers">
+            <Dependent Role="Courses">
               <PropertyRef Name="TeacherId" />
             </Dependent>
           </ReferentialConstraint>
@@ -213,25 +175,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Students_Courses">
+          <End Role="Courses" Type="Self.Courses" Multiplicity="0..1" />
+          <End Role="Students" Type="Self.Students" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Courses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Students">
+              <PropertyRef Name="CourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="SundaySchoolRegistryModelStoreContainer">
-          <EntitySet Name="ClassRoomCourses" EntityType="Self.ClassRoomCourses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ClassRooms" EntityType="Self.ClassRooms" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CourseAttendencies" EntityType="Self.CourseAttendencies" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Courses" EntityType="Self.Courses" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="CourseTeachers" EntityType="Self.CourseTeachers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Guardian" EntityType="Self.Guardian" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GuardianStudents" EntityType="Self.GuardianStudents" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GuardianType" EntityType="Self.GuardianType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Students" EntityType="Self.Students" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Teachers" EntityType="Self.Teachers" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_ClassRoomCourses_ClassRooms" Association="Self.FK_ClassRoomCourses_ClassRooms">
-            <End Role="ClassRooms" EntitySet="ClassRooms" />
-            <End Role="ClassRoomCourses" EntitySet="ClassRoomCourses" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ClassRoomCourses_Courses" Association="Self.FK_ClassRoomCourses_Courses">
-            <End Role="Courses" EntitySet="Courses" />
-            <End Role="ClassRoomCourses" EntitySet="ClassRoomCourses" />
-          </AssociationSet>
           <AssociationSet Name="FK_CourseAttendencies_Courses" Association="Self.FK_CourseAttendencies_Courses">
             <End Role="Courses" EntitySet="Courses" />
             <End Role="CourseAttendencies" EntitySet="CourseAttendencies" />
@@ -240,13 +204,13 @@
             <End Role="Students" EntitySet="Students" />
             <End Role="CourseAttendencies" EntitySet="CourseAttendencies" />
           </AssociationSet>
-          <AssociationSet Name="FK_CourseTeachers_Courses" Association="Self.FK_CourseTeachers_Courses">
+          <AssociationSet Name="FK_Courses_ClassRooms" Association="Self.FK_Courses_ClassRooms">
+            <End Role="ClassRooms" EntitySet="ClassRooms" />
             <End Role="Courses" EntitySet="Courses" />
-            <End Role="CourseTeachers" EntitySet="CourseTeachers" />
           </AssociationSet>
-          <AssociationSet Name="FK_CourseTeachers_Teachers" Association="Self.FK_CourseTeachers_Teachers">
+          <AssociationSet Name="FK_Courses_Teachers" Association="Self.FK_Courses_Teachers">
             <End Role="Teachers" EntitySet="Teachers" />
-            <End Role="CourseTeachers" EntitySet="CourseTeachers" />
+            <End Role="Courses" EntitySet="Courses" />
           </AssociationSet>
           <AssociationSet Name="FK_GuardianStudents_Guardian" Association="Self.FK_GuardianStudents_Guardian">
             <End Role="Guardian" EntitySet="Guardian" />
@@ -260,6 +224,10 @@
             <End Role="Students" EntitySet="Students" />
             <End Role="GuardianStudents" EntitySet="GuardianStudents" />
           </AssociationSet>
+          <AssociationSet Name="FK_Students_Courses" Association="Self.FK_Students_Courses">
+            <End Role="Courses" EntitySet="Courses" />
+            <End Role="Students" EntitySet="Students" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -272,7 +240,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="RoomNumber" Type="String" MaxLength="5" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Courses" Relationship="Self.ClassRoomCourses" FromRole="ClassRooms" ToRole="Courses" />
+          <NavigationProperty Name="Courses" Relationship="Self.FK_Courses_ClassRooms" FromRole="ClassRooms" ToRole="Courses" />
         </EntityType>
         <EntityType Name="CourseAttendency">
           <Key>
@@ -296,12 +264,29 @@
           <Property Name="StartHour" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="EndHour" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="MinimumAge" Type="Int32" Nullable="false" />
-          <Property Name="MaximumAge" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="MaximumAge" Type="Int32" Nullable="false" />
           <Property Name="DayOfWeek" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="ClassroomId" Type="Int32" Nullable="false" />
+          <Property Name="TeacherId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ClassRoom" Relationship="Self.FK_Courses_ClassRooms" FromRole="Courses" ToRole="ClassRooms" />
           <NavigationProperty Name="CourseAttendencies" Relationship="Self.FK_CourseAttendencies_Courses" FromRole="Courses" ToRole="CourseAttendencies" />
-          <NavigationProperty Name="ClassRooms" Relationship="Self.ClassRoomCourses" FromRole="Courses" ToRole="ClassRooms" />
-          <NavigationProperty Name="Teachers" Relationship="Self.CourseTeachers" FromRole="Courses" ToRole="Teachers" />
+          <NavigationProperty Name="Teacher" Relationship="Self.FK_Courses_Teachers" FromRole="Courses" ToRole="Teachers" />
+          <NavigationProperty Name="Students" Relationship="SundaySchoolRegistryModel.FK_Students_Courses" FromRole="Cours" ToRole="Student" />
+        </EntityType>
+        <EntityType Name="Guardian">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CellNumber" Type="String" MaxLength="13" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="HomeNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="GuardianStudents" Relationship="Self.FK_GuardianStudents_Guardian" FromRole="Guardian" ToRole="GuardianStudents" />
         </EntityType>
         <EntityType Name="GuardianStudent">
           <Key>
@@ -311,9 +296,9 @@
           <Property Name="GuardianId" Type="Int32" Nullable="false" />
           <Property Name="StudentId" Type="Int32" Nullable="false" />
           <Property Name="GuardianTypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Guardian" Relationship="Self.FK_GuardianStudents_Guardian" FromRole="GuardianStudents" ToRole="Guardian" />
           <NavigationProperty Name="GuardianType" Relationship="Self.FK_GuardianStudents_GuardianType" FromRole="GuardianStudents" ToRole="GuardianType" />
           <NavigationProperty Name="Student" Relationship="Self.FK_GuardianStudents_Students" FromRole="GuardianStudents" ToRole="Students" />
-          <NavigationProperty Name="Guardian" Relationship="SundaySchoolRegistryModel.FK_GuardianStudents_Guardian" FromRole="GuardianStudent" ToRole="Guardian" />
         </EntityType>
         <EntityType Name="GuardianType">
           <Key>
@@ -337,6 +322,8 @@
           <Property Name="SpecialInstructions" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="CourseAttendencies" Relationship="Self.FK_CourseAttendencies_Students" FromRole="Students" ToRole="CourseAttendencies" />
           <NavigationProperty Name="GuardianStudents" Relationship="Self.FK_GuardianStudents_Students" FromRole="Students" ToRole="GuardianStudents" />
+          <Property Name="CourseId" Type="Int32" />
+          <NavigationProperty Name="Cours" Relationship="SundaySchoolRegistryModel.FK_Students_Courses" FromRole="Student" ToRole="Cours" />
         </EntityType>
         <EntityType Name="Teacher">
           <Key>
@@ -346,8 +333,20 @@
           <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Courses" Relationship="Self.CourseTeachers" FromRole="Teachers" ToRole="Courses" />
+          <NavigationProperty Name="Courses" Relationship="Self.FK_Courses_Teachers" FromRole="Teachers" ToRole="Courses" />
         </EntityType>
+        <Association Name="FK_Courses_ClassRooms">
+          <End Role="ClassRooms" Type="Self.ClassRoom" Multiplicity="1" />
+          <End Role="Courses" Type="Self.Cours" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClassRooms">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Courses">
+              <PropertyRef Name="ClassroomId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CourseAttendencies_Courses">
           <End Role="Courses" Type="Self.Cours" Multiplicity="1" />
           <End Role="CourseAttendencies" Type="Self.CourseAttendency" Multiplicity="*" />
@@ -369,6 +368,30 @@
             </Principal>
             <Dependent Role="CourseAttendencies">
               <PropertyRef Name="StudentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Courses_Teachers">
+          <End Role="Teachers" Type="Self.Teacher" Multiplicity="1" />
+          <End Role="Courses" Type="Self.Cours" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teachers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Courses">
+              <PropertyRef Name="TeacherId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GuardianStudents_Guardian">
+          <End Role="Guardian" Type="Self.Guardian" Multiplicity="1" />
+          <End Role="GuardianStudents" Type="Self.GuardianStudent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Guardian">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GuardianStudents">
+              <PropertyRef Name="GuardianId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -396,22 +419,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="ClassRoomCourses">
-          <End Role="ClassRooms" Type="Self.ClassRoom" Multiplicity="*" />
-          <End Role="Courses" Type="Self.Cours" Multiplicity="*" />
-        </Association>
-        <Association Name="CourseTeachers">
-          <End Role="Courses" Type="Self.Cours" Multiplicity="*" />
-          <End Role="Teachers" Type="Self.Teacher" Multiplicity="*" />
-        </Association>
         <EntityContainer Name="SundaySchoolRegistryContext" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="ClassRooms" EntityType="Self.ClassRoom" />
           <EntitySet Name="CourseAttendencies" EntityType="Self.CourseAttendency" />
           <EntitySet Name="Courses" EntityType="Self.Cours" />
+          <EntitySet Name="Guardians" EntityType="Self.Guardian" />
           <EntitySet Name="GuardianStudents" EntityType="Self.GuardianStudent" />
           <EntitySet Name="GuardianTypes" EntityType="Self.GuardianType" />
           <EntitySet Name="Students" EntityType="Self.Student" />
           <EntitySet Name="Teachers" EntityType="Self.Teacher" />
+          <AssociationSet Name="FK_Courses_ClassRooms" Association="Self.FK_Courses_ClassRooms">
+            <End Role="ClassRooms" EntitySet="ClassRooms" />
+            <End Role="Courses" EntitySet="Courses" />
+          </AssociationSet>
           <AssociationSet Name="FK_CourseAttendencies_Courses" Association="Self.FK_CourseAttendencies_Courses">
             <End Role="Courses" EntitySet="Courses" />
             <End Role="CourseAttendencies" EntitySet="CourseAttendencies" />
@@ -419,6 +439,14 @@
           <AssociationSet Name="FK_CourseAttendencies_Students" Association="Self.FK_CourseAttendencies_Students">
             <End Role="Students" EntitySet="Students" />
             <End Role="CourseAttendencies" EntitySet="CourseAttendencies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Courses_Teachers" Association="Self.FK_Courses_Teachers">
+            <End Role="Teachers" EntitySet="Teachers" />
+            <End Role="Courses" EntitySet="Courses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GuardianStudents_Guardian" Association="Self.FK_GuardianStudents_Guardian">
+            <End Role="Guardian" EntitySet="Guardians" />
+            <End Role="GuardianStudents" EntitySet="GuardianStudents" />
           </AssociationSet>
           <AssociationSet Name="FK_GuardianStudents_GuardianType" Association="Self.FK_GuardianStudents_GuardianType">
             <End Role="GuardianType" EntitySet="GuardianTypes" />
@@ -428,43 +456,20 @@
             <End Role="Students" EntitySet="Students" />
             <End Role="GuardianStudents" EntitySet="GuardianStudents" />
           </AssociationSet>
-          <AssociationSet Name="ClassRoomCourses" Association="Self.ClassRoomCourses">
-            <End Role="ClassRooms" EntitySet="ClassRooms" />
-            <End Role="Courses" EntitySet="Courses" />
-          </AssociationSet>
-          <AssociationSet Name="CourseTeachers" Association="Self.CourseTeachers">
-            <End Role="Courses" EntitySet="Courses" />
-            <End Role="Teachers" EntitySet="Teachers" />
-          </AssociationSet>
-          <EntitySet Name="Guardians" EntityType="SundaySchoolRegistryModel.Guardian" />
-          <AssociationSet Name="FK_GuardianStudents_Guardian" Association="SundaySchoolRegistryModel.FK_GuardianStudents_Guardian">
-            <End Role="Guardian" EntitySet="Guardians" />
-            <End Role="GuardianStudent" EntitySet="GuardianStudents" />
+          <AssociationSet Name="FK_Students_Courses" Association="SundaySchoolRegistryModel.FK_Students_Courses">
+            <End Role="Cours" EntitySet="Courses" />
+            <End Role="Student" EntitySet="Students" />
           </AssociationSet>
         </EntityContainer>
-        <EntityType Name="Guardian">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Address" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="City" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CellNumber" Type="String" Nullable="false" MaxLength="13" FixedLength="false" Unicode="true" />
-          <Property Name="HomeNumber" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="GuardianStudents" Relationship="SundaySchoolRegistryModel.FK_GuardianStudents_Guardian" FromRole="Guardian" ToRole="GuardianStudent" />
-        </EntityType>
-        <Association Name="FK_GuardianStudents_Guardian">
-          <End Type="SundaySchoolRegistryModel.Guardian" Role="Guardian" Multiplicity="1" />
-          <End Type="SundaySchoolRegistryModel.GuardianStudent" Role="GuardianStudent" Multiplicity="*" />
+        <Association Name="FK_Students_Courses">
+          <End Type="SundaySchoolRegistryModel.Cours" Role="Cours" Multiplicity="0..1" />
+          <End Type="SundaySchoolRegistryModel.Student" Role="Student" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Guardian">
+            <Principal Role="Cours">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="GuardianStudent">
-              <PropertyRef Name="GuardianId" />
+            <Dependent Role="Student">
+              <PropertyRef Name="CourseId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -506,6 +511,22 @@
                 <ScalarProperty Name="MaximumAge" ColumnName="MaximumAge" />
                 <ScalarProperty Name="DayOfWeek" ColumnName="DayOfWeek" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ClassroomId" ColumnName="ClassroomId" />
+                <ScalarProperty Name="TeacherId" ColumnName="TeacherId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Guardians">
+            <EntityTypeMapping TypeName="SundaySchoolRegistryModel.Guardian">
+              <MappingFragment StoreEntitySet="Guardian">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="CellNumber" ColumnName="CellNumber" />
+                <ScalarProperty Name="HomeNumber" ColumnName="HomeNumber" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -529,6 +550,7 @@
           <EntitySetMapping Name="Students">
             <EntityTypeMapping TypeName="SundaySchoolRegistryModel.Student">
               <MappingFragment StoreEntitySet="Students">
+                <ScalarProperty Name="CourseId" ColumnName="CourseId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
@@ -547,36 +569,6 @@
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
                 <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <AssociationSetMapping Name="ClassRoomCourses" TypeName="SundaySchoolRegistryModel.ClassRoomCourses" StoreEntitySet="ClassRoomCourses">
-            <EndProperty Name="ClassRooms">
-              <ScalarProperty Name="Id" ColumnName="CourseId" />
-            </EndProperty>
-            <EndProperty Name="Courses">
-              <ScalarProperty Name="Id" ColumnName="ClassRoomId" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="CourseTeachers" TypeName="SundaySchoolRegistryModel.CourseTeachers" StoreEntitySet="CourseTeachers">
-            <EndProperty Name="Courses">
-              <ScalarProperty Name="Id" ColumnName="CourseId" />
-            </EndProperty>
-            <EndProperty Name="Teachers">
-              <ScalarProperty Name="Id" ColumnName="TeacherId" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <EntitySetMapping Name="Guardians">
-            <EntityTypeMapping TypeName="SundaySchoolRegistryModel.Guardian">
-              <MappingFragment StoreEntitySet="Guardian">
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="HomeNumber" ColumnName="HomeNumber" />
-                <ScalarProperty Name="CellNumber" ColumnName="CellNumber" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -6,7 +6,7 @@ End Code
 <h2>Details</h2>
 
 <div>
-    <h4>Cours</h4>
+    <h4>Course</h4>
     <hr />
     <dl class="dl-horizontal">
         
@@ -70,9 +70,38 @@ End Code
 
         
 
+        
+
     </dl>
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", New With {.id = Model.Id}) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+
+<h2>Students</h2>
+<table class="table">
+    <tr>
+        <th>
+            First Name
+        </th>
+        <th>
+            Last Name
+        </th>
+
+    </tr>
+
+    @For Each item In Model.Students
+        @<tr>
+            <td>
+                @Html.DisplayFor(Function(modelItem) item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(Function(modelItem) item.LastName)
+            </td>
+
+        </tr>
+    Next
+
+</table>
+

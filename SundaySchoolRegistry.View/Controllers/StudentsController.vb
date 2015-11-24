@@ -23,6 +23,16 @@ Namespace Controllers
         ''' </summary>
         Private studentService As New StudentService()
 
+        ''' <summary>
+        ''' Guardian business logic attribute
+        ''' </summary>
+        Private guardianService As New GuardianService()
+
+        ''' <summary>
+        ''' courses business logic attribute
+        ''' </summary>
+        Private courseService As New CourseService()
+
         ' GET: /students.
         ''' <summary>
         ''' Action that queries all teachers 
@@ -52,14 +62,28 @@ Namespace Controllers
             Return View(student)
         End Function
 
+
+        ''' <summary>
+        ''' Create a list to populate the courses
+        ''' </summary>
+        ''' <param name="courses">list of courses</param>
+        ''' <returns>SelectList of courses</returns>
+        Function GetCourses(courses As IEnumerable(Of Cours)) As SelectList
+            Dim selectList As SelectList = New SelectList(courses, "Id", "Name")
+            Return selectList
+        End Function
+
         ' GET: Students/Create
         ''' <summary>
         ''' Action to call the page to create a student
         ''' </summary>
         ''' <returns>Empty view to for the user to enter the student information</returns>
         Function Create() As ActionResult
+            Dim courses As IEnumerable = courseService.FindAll()
+            ViewBag.Courses = GetCourses(courses)
             Return View()
         End Function
+
 
 
         ' POST: Students/Create
@@ -69,7 +93,7 @@ Namespace Controllers
         ''' <param name="student">Student information to be inserted in the database</param>
         ''' <returns>View to be displayed once the teacher is created</returns>
         <HttpPost()>
-        Function Create(<Bind(Include:="Id,FirstName,LastName,Address,City,DateBirth,Allergies,SpecialInstructions")> ByVal student As Student) As ActionResult
+        Function Create(<Bind(Include:="Id,FirstName,LastName,Address,City,DateBirth,Allergies,SpecialInstructions,CourseId")> ByVal student As Student) As ActionResult
             ' check if the student is information is complete and valid
             If ModelState.IsValid Then
                 ' create the student and redirect to the list of teacher page
@@ -97,6 +121,10 @@ Namespace Controllers
             If IsNothing(student) Then
                 Return HttpNotFound()
             End If
+
+            Dim courses As IEnumerable = courseService.FindAll()
+            ViewBag.Courses = GetCourses(courses)
+
             Return View(student)
         End Function
 
@@ -108,7 +136,7 @@ Namespace Controllers
         ''' <param name="student">student information to be updated</param>
         ''' <returns>view to be displayed</returns>
         <HttpPost()>
-        Function Edit(<Bind(Include:="Id,FirstName,LastName,Address,City,DateBirth,Allergies,SpecialInstructions")> ByVal student As Student) As ActionResult
+        Function Edit(<Bind(Include:="Id,FirstName,LastName,Address,City,DateBirth,Allergies,SpecialInstructions,CourseId")> ByVal student As Student) As ActionResult
             ' validate the information is correct
             If ModelState.IsValid Then
                 ' update student
@@ -167,6 +195,97 @@ Namespace Controllers
 
             End Try
             Return RedirectToAction("Index")
+        End Function
+
+        ''' <summary>
+        ''' Create a list to populate the guardian dropdown
+        ''' </summary>
+        ''' <param name="guardians">list of guardians</param>
+        ''' <returns>list of guardians</returns>
+        Function GetGuardians(guardians As IEnumerable(Of Guardian)) As SelectList
+            Dim list = New List(Of SelectListItem)
+            For Each guardian As Guardian In guardians
+                list.Add(New SelectListItem With
+                {
+                    .Value = guardian.Id,
+                    .Text = guardian.FirstName + " " + guardian.LastName
+                }
+                )
+            Next
+            Dim selectList As SelectList = New SelectList(list, "Value", "Text")
+            Return selectList
+
+        End Function
+
+        ''' <summary>
+        ''' Create a list to populate the guardian types
+        ''' </summary>
+        ''' <param name="types">types</param>
+        ''' <returns>list of guardian types</returns>
+        Function GetGuardianTypes(types As IEnumerable(Of GuardianType)) As SelectList
+            Dim selectList As SelectList = New SelectList(types, "Id", "Name")
+            Return selectList
+        End Function
+
+        ' GET: Students/AddGuardian
+        ''' <summary>
+        ''' Action to call the page to Add guardian page
+        ''' </summary>
+        ''' <returns>Empty view to for the user to select the student's gardian</returns>
+        Function AddGuardian(ByVal id As Integer) As ActionResult
+            Dim guardians As IEnumerable = guardianService.FindAll()
+            ViewBag.Guardians = GetGuardians(guardians)
+
+            Dim types As IEnumerable = guardianService.FindAllGuardianTypes()
+            ViewBag.GuardianTypes = GetGuardianTypes(types)
+
+            Dim guardianStudent = New GuardianStudent()
+            guardianStudent.Student = studentService.Find(id)
+            guardianStudent.StudentId = guardianStudent.Student.Id
+
+            Return View(guardianStudent)
+        End Function
+
+
+        ' POST: Students/AddGuardian
+        ''' <summary>
+        ''' Action invoked to Add guardian.
+        ''' </summary>
+        ''' <param name="guardianStudent">Guardian Student information to be inserted in the database</param>
+        ''' <returns>View to be displayed once the guardian is associated with the student</returns>
+        <HttpPost()>
+        Function AddGuardian(<Bind(Include:="GuardianId,StudentId,GuardianTypeId")> ByVal guardianStudent As GuardianStudent) As ActionResult
+            Try
+                If ModelState.IsValid Then
+                    studentService.AddGuardian(guardianStudent)
+                    Return RedirectToAction("Edit", New With {.id = guardianStudent.StudentId})
+                End If
+                ' if the information is not valid return to the create page and display the information again
+            Catch ex As Exception
+                ModelState.AddModelError("", "Error adding the Guardian. Make sure the guardian selected has not been already assgined")
+            End Try
+            Return RedirectToAction("AddGuardian", New With {.id = guardianStudent.StudentId})
+
+        End Function
+
+
+        ' GET: Students/DeleteGuardian/5
+        ''' <summary>
+        ''' Action to call the page for deleting the teacher
+        ''' </summary>
+        ''' <param name="StudentId">student id</param>
+        ''' <returns>Call page to delete the student</returns>
+        Function DeleteGuardian(ByVal GuardianId As Integer?, ByVal StudentId As Integer?) As ActionResult
+
+            If IsNothing(GuardianId) Or IsNothing(StudentId) Then
+                Return New HttpStatusCodeResult(HttpStatusCode.BadRequest)
+            End If
+            Dim guardianStudent = New GuardianStudent()
+            guardianStudent.GuardianId = GuardianId
+            guardianStudent.StudentId = StudentId
+            studentService.RemoveGuardian(guardianStudent)
+
+            Return RedirectToAction("Edit", New With {.id = StudentId})
         End Function
 
 

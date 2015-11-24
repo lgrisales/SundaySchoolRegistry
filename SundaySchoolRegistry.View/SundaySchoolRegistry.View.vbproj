@@ -202,6 +202,7 @@
     <Compile Include="App_Start\RouteConfig.vb" />
     <Compile Include="App_Start\Startup.Auth.vb" />
     <Compile Include="Controllers\AccountController.vb" />
+    <Compile Include="Controllers\CheckInOutController.vb" />
     <Compile Include="Controllers\ClassRoomsController.vb" />
     <Compile Include="Controllers\CoursesController.vb" />
     <Compile Include="Controllers\GuardiansController.vb" />
@@ -305,6 +306,9 @@
     <Content Include="Views\Courses\Details.vbhtml" />
     <Content Include="Views\Courses\Edit.vbhtml" />
     <Content Include="Views\Courses\Index.vbhtml" />
+    <Content Include="Views\Students\AddGuardian.vbhtml" />
+    <Content Include="Views\Courses\AddStudents.vbhtml" />
+    <Content Include="Views\CheckInOut\Checkin.vbhtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />

@@ -61,8 +61,9 @@ Public Class CourseService
         Dim course As Cours
 
         Using repository As New CourseRepository()
-
             course = repository.Find(id)
+            ' force to load the list of students from db
+            course.Students.ToList()
         End Using
         Return course
 

@@ -52,4 +52,12 @@ Public Class GuardianRepository
         Return DBContext.Guardians.ToList()
     End Function
 
+    ''' <summary>
+    ''' Returns all guardians 
+    ''' </summary>
+    ''' <returns>list of guardians</returns>
+    Public Function FindAllGuardianTypes() As IEnumerable
+        Return DBContext.GuardianTypes.ToList()
+    End Function
+
 End Class

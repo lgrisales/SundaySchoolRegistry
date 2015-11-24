@@ -70,15 +70,26 @@ End Code
             </div>
         </div>
 
-        
+         <div class="form-group">
+            @Html.LabelFor(Function(model) model.ClassroomId, htmlAttributes:=New With {.class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.DropDownListFor(Function(model) model.ClassroomId, CType(ViewData("Classrooms"), SelectList), New With {.Class = "form-control"})
+            </div>
+         </div>
+
+         <div class="form-group">
+             @Html.LabelFor(Function(model) model.TeacherId, htmlAttributes:=New With {.class = "control-label col-md-2"})
+             <div class="col-md-10">
+                 @Html.DropDownListFor(Function(model) model.TeacherId, CType(ViewData("Teachers"), SelectList), New With {.Class = "form-control"})
+             </div>
+         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </div>
-    </div>
-End Using
+    </div>  End Using
 
 <div>
     @Html.ActionLink("Back to List", "Index")

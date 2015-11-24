@@ -4,22 +4,23 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="4aa64e3f03a84c3bbd5953661ac48378" Name="Diagram1">
-        <EntityTypeShape EntityType="SundaySchoolRegistryModel.ClassRoom" Width="1.5" PointX="1.5" PointY="19" IsExpanded="true" />
+      <Diagram DiagramId="3e387d69b7e0471fbe38bd014423c6aa" Name="Diagram1">
+        <EntityTypeShape EntityType="SundaySchoolRegistryModel.ClassRoom" Width="1.5" PointX="1.5" PointY="18.625" IsExpanded="true" />
         <EntityTypeShape EntityType="SundaySchoolRegistryModel.CourseAttendency" Width="1.5" PointX="3" PointY="3.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="SundaySchoolRegistryModel.Cours" Width="1.5" PointX="1.125" PointY="14" IsExpanded="true" />
+        <EntityTypeShape EntityType="SundaySchoolRegistryModel.Cours" Width="1.5" PointX="0.75" PointY="14" IsExpanded="true" />
+        <EntityTypeShape EntityType="SundaySchoolRegistryModel.Guardian" Width="1.5" PointX="0.75" PointY="7.375" IsExpanded="true" />
         <EntityTypeShape EntityType="SundaySchoolRegistryModel.GuardianStudent" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="SundaySchoolRegistryModel.GuardianType" Width="1.5" PointX="0.75" PointY="10.875" IsExpanded="true" />
         <EntityTypeShape EntityType="SundaySchoolRegistryModel.Student" Width="1.5" PointX="0.75" PointY="3.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="SundaySchoolRegistryModel.Teacher" Width="1.5" PointX="4.25" PointY="14.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SundaySchoolRegistryModel.Teacher" Width="1.5" PointX="1.5" PointY="21.125" IsExpanded="true" />
+        <AssociationConnector Association="SundaySchoolRegistryModel.FK_Courses_ClassRooms" ManuallyRouted="false" />
         <AssociationConnector Association="SundaySchoolRegistryModel.FK_CourseAttendencies_Courses" ManuallyRouted="false" />
         <AssociationConnector Association="SundaySchoolRegistryModel.FK_CourseAttendencies_Students" ManuallyRouted="false" />
+        <AssociationConnector Association="SundaySchoolRegistryModel.FK_Courses_Teachers" ManuallyRouted="false" />
+        <AssociationConnector Association="SundaySchoolRegistryModel.FK_GuardianStudents_Guardian" ManuallyRouted="false" />
         <AssociationConnector Association="SundaySchoolRegistryModel.FK_GuardianStudents_GuardianType" ManuallyRouted="false" />
         <AssociationConnector Association="SundaySchoolRegistryModel.FK_GuardianStudents_Students" ManuallyRouted="false" />
-        <AssociationConnector Association="SundaySchoolRegistryModel.ClassRoomCourses" ManuallyRouted="false" />
-        <AssociationConnector Association="SundaySchoolRegistryModel.CourseTeachers" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="SundaySchoolRegistryModel.Guardian" Width="1.5" PointX="5.375" PointY="1" />
-        <AssociationConnector Association="SundaySchoolRegistryModel.FK_GuardianStudents_Guardian" />
+        <AssociationConnector Association="SundaySchoolRegistryModel.FK_Students_Courses" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

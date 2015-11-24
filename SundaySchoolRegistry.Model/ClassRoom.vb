@@ -9,17 +9,10 @@
 
 Imports System
 Imports System.Collections.Generic
-Imports System.ComponentModel.DataAnnotations
 
 Partial Public Class ClassRoom
     Public Property Id As Integer
-    <Required>
-    <StringLength(5)>
-    <Display(Name:="Room number")>
     Public Property RoomNumber As String
-    <Required>
-    <StringLength(250)>
-    <Display(Name:="Description")>
     Public Property Description As String
 
     Public Overridable Property Courses As ICollection(Of Cours) = New HashSet(Of Cours)

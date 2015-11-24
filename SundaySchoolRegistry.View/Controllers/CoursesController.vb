@@ -22,6 +22,8 @@ Namespace Controllers
         ''' Course business logic attribute
         ''' </summary>
         Private courseService As New CourseService()
+        Private classroosmService As New ClassRoomService()
+        Private teacherService As New TeacherService()
 
 
         ' GET: Courses.
@@ -59,7 +61,41 @@ Namespace Controllers
         ''' </summary>
         ''' <returns>Empty view to for the user to enter the course information</returns>
         Function Create() As ActionResult
+            Dim classrooms As IEnumerable = classroosmService.FindAll()
+            ViewBag.Classrooms = GetClassrooms(classrooms)
+            Dim techers As IEnumerable = teacherService.FindAll()
+            ViewBag.Teachers = GetTeachers(techers)
+
             Return View() 'form to create the view
+        End Function
+
+        ''' <summary>
+        ''' Create a list to populate the classrooms
+        ''' </summary>
+        ''' <param name="rooms">list of classrooms</param>
+        ''' <returns>Selectlist of classrooms</returns>
+        Function GetClassrooms(rooms As IEnumerable(Of ClassRoom)) As SelectList
+            Dim selectList As SelectList = New SelectList(rooms, "Id", "RoomNumber")
+            Return selectList
+        End Function
+
+        ''' <summary>
+        ''' Create a list to populate the teachers
+        ''' </summary>
+        ''' <param name="teachers">list of teacher</param>
+        ''' <returns>Selectlist of teachers</returns>
+        Function GetTeachers(teachers As IEnumerable(Of Teacher)) As SelectList
+            Dim list = New List(Of SelectListItem)
+            For Each teacher As Teacher In teachers
+                list.Add(New SelectListItem With
+                {
+                    .Value = teacher.Id,
+                    .Text = teacher.FirstName + " " + teacher.LastName
+                }
+                )
+            Next
+            Dim selectList As SelectList = New SelectList(list, "Value", "Text")
+            Return selectList
         End Function
 
         ' POST: Courses/Create
@@ -69,7 +105,7 @@ Namespace Controllers
         ''' <param name="course">Course information to be inserted in the database</param>
         ''' <returns>View to be displayed once the course is created</returns>
         <HttpPost()>
-        Function Create(<Bind(Include:="Id,Name,Description,StartHour,EndHour,MinimumAge,MaximumAge,DayOfWeek")> ByVal course As Cours) As ActionResult
+        Function Create(<Bind(Include:="Id,Name,Description,StartHour,EndHour,MinimumAge,MaximumAge,DayOfWeek,ClassroomId,TeacherId")> ByVal course As Cours) As ActionResult
             ' check if the course is information is complete and valid
             If ModelState.IsValid Then
                 ' create the course and redirect to the list of course page
@@ -97,6 +133,12 @@ Namespace Controllers
             If IsNothing(course) Then
                 Return HttpNotFound()
             End If
+
+            Dim classrooms As IEnumerable = classroosmService.FindAll()
+            ViewBag.Classrooms = GetClassrooms(classrooms)
+            Dim techers As IEnumerable = teacherService.FindAll()
+            ViewBag.Teachers = GetTeachers(techers)
+
             Return View(course)
         End Function
 
@@ -107,7 +149,7 @@ Namespace Controllers
         ''' <param name="course">course information to be updated</param>
         ''' <returns>view to be displayed</returns>
         <HttpPost()>
-        Function Edit(<Bind(Include:="Id,Name,Description,StartHour,EndHour,MinimumAge,MaximumAge,DayOfWeek,Status")> ByVal course As Cours) As ActionResult
+        Function Edit(<Bind(Include:="Id,Name,Description,StartHour,EndHour,MinimumAge,MaximumAge,DayOfWeek,ClassroomId,TeacherId")> ByVal course As Cours) As ActionResult
             ' validate the information is correct
             If ModelState.IsValid Then
                 ' update course

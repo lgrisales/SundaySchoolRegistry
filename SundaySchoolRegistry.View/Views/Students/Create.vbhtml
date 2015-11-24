@@ -68,6 +68,13 @@ End Code
             </div>
         </div>
 
+         <div class="form-group">
+             @Html.LabelFor(Function(model) model.CourseId, htmlAttributes:=New With {.class = "control-label col-md-2"})
+             <div class="col-md-10">
+                 @Html.DropDownListFor(Function(model) model.CourseId, CType(ViewData("Courses"), SelectList), New With {.Class = "form-control"})
+             </div>
+         </div>
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />

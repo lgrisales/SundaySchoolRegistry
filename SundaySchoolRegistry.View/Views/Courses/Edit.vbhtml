@@ -72,14 +72,54 @@ End Code
             </div>
         </div>
 
-        
+         <div class="form-group">
+             @Html.LabelFor(Function(model) model.ClassroomId, htmlAttributes:=New With {.class = "control-label col-md-2"})
+             <div class="col-md-10">
+                 @Html.DropDownListFor(Function(model) model.ClassroomId, CType(ViewData("Classrooms"), SelectList), New With {.Class = "form-control"})
+             </div>
+         </div>
+
+         <div class="form-group">
+             @Html.LabelFor(Function(model) model.TeacherId, htmlAttributes:=New With {.class = "control-label col-md-2"})
+             <div class="col-md-10">
+                 @Html.DropDownListFor(Function(model) model.TeacherId, CType(ViewData("Teachers"), SelectList), New With {.Class = "form-control"})
+             </div>
+         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </div>
+
+         <h2>Students</h2>
+         <table class="table">
+             <tr>
+                 <th>
+                     First Name
+                 </th>
+                 <th>
+                     Last Name
+                 </th>
+
+             </tr>
+
+             @For Each item In Model.Students
+                 @<tr>
+                     <td>
+                         @Html.DisplayFor(Function(modelItem) item.FirstName) 
+                     </td>
+                      <td>
+                          @Html.DisplayFor(Function(modelItem) item.LastName)
+                      </td>
+                      
+                 </tr>
+             Next
+
+         </table>
     </div>
+
+
 End Using
 
 <div>

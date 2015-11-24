@@ -25,10 +25,10 @@ Partial Public Class SundaySchoolRegistryContext
     Public Overridable Property ClassRooms() As DbSet(Of ClassRoom)
     Public Overridable Property CourseAttendencies() As DbSet(Of CourseAttendency)
     Public Overridable Property Courses() As DbSet(Of Cours)
+    Public Overridable Property Guardians() As DbSet(Of Guardian)
     Public Overridable Property GuardianStudents() As DbSet(Of GuardianStudent)
     Public Overridable Property GuardianTypes() As DbSet(Of GuardianType)
     Public Overridable Property Students() As DbSet(Of Student)
     Public Overridable Property Teachers() As DbSet(Of Teacher)
-    Public Overridable Property Guardians() As DbSet(Of Guardian)
 
 End Class

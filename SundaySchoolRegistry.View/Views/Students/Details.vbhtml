@@ -66,6 +66,27 @@ End Code
         </dd>
 
     </dl>
+
+
+        <h2>Student's Guardians</h2>
+         <table class="table">
+             <tr>
+                 <th>
+                     Guardian
+                 </th>
+
+             </tr>
+                
+             @For Each item In Model.GuardianStudents
+                 @<tr>
+                     <td>
+                         @Html.DisplayFor(Function(modelItem) item.Guardian.FirstName) @Html.DisplayFor(Function(modelItem) item.Guardian.LastName)
+                     </td>
+
+                 </tr>
+             Next
+
+         </table>
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", New With { .id = Model.Id }) |

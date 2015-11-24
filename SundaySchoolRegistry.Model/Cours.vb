@@ -9,34 +9,23 @@
 
 Imports System
 Imports System.Collections.Generic
-Imports System.ComponentModel.DataAnnotations
 
 Partial Public Class Cours
     Public Property Id As Integer
-    <Required>
-    <StringLength(50)>
     Public Property Name As String
-    <StringLength(250)>
     Public Property Description As String
-    <Required>
-    <DataType(DataType.Time)>
     Public Property StartHour As Date
-    <Required>
-    <DataType(DataType.Time)>
     Public Property EndHour As Date
-    <Required>
-    <Display(Name:="Minimum Age")>
     Public Property MinimumAge As Integer
-    <Required>
-    <Display(Name:="Maximum Age")>
-    Public Property MaximumAge As String
-    <Required>
-    <Display(Name:="Day Of Week")>
+    Public Property MaximumAge As Integer
     Public Property DayOfWeek As String
     Public Property Status As Integer
+    Public Property ClassroomId As Integer
+    Public Property TeacherId As Integer
 
+    Public Overridable Property ClassRoom As ClassRoom
     Public Overridable Property CourseAttendencies As ICollection(Of CourseAttendency) = New HashSet(Of CourseAttendency)
-    Public Overridable Property ClassRooms As ICollection(Of ClassRoom) = New HashSet(Of ClassRoom)
-    Public Overridable Property Teachers As ICollection(Of Teacher) = New HashSet(Of Teacher)
+    Public Overridable Property Teacher As Teacher
+    Public Overridable Property Students As ICollection(Of Student) = New HashSet(Of Student)
 
 End Class

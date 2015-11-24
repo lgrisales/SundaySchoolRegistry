@@ -65,6 +65,11 @@ Public Class StudentService
         Using repository As New StudentRepository()
 
             student = repository.Find(id)
+            ' this loop is to force entity framework to load the list of guardians
+            ' and every guardian object from database
+            For Each item As GuardianStudent In student.GuardianStudents
+                Dim name = item.Guardian.FirstName
+            Next
         End Using
         Return student
 
@@ -84,7 +89,52 @@ Public Class StudentService
         Return students
     End Function
 
+    ''' <summary>
+    ''' Associates a guardian to a student
+    ''' </summary>
+    ''' <param name="guardianStudent">guardian information</param>
+    Public Sub AddGuardian(guardianStudent As GuardianStudent)
 
+        Using repository As New StudentRepository
+            repository.AddGuardian(guardianStudent)
+        End Using  'dispose the object
+
+    End Sub
+
+    ''' <summary>
+    ''' Remove the relation between a guardian and an student
+    ''' </summary>
+    ''' <param name="guardianStudent">guardian student information</param>
+    Public Sub RemoveGuardian(guardianStudent As GuardianStudent)
+
+        Using repository As New StudentRepository
+            repository.RemoveGuardian(guardianStudent)
+        End Using  'dispose the object
+
+    End Sub
+
+
+
+    ''' <summary>
+    ''' Checks in the student in a course
+    ''' </summary>
+    ''' <param name="studentId">student id</param>
+    ''' <param name="courseId">course id</param>
+    ''' <returns>true if the student is already checked in</returns>
+    Public Function CheckInStudent(studentId As Integer, courseId As Integer) As Boolean
+        Dim alreadyCheckedIn = True
+        Using repository As New StudentRepository
+            ' check if the student is already checked in
+            Dim todayCheckin = repository.GetCurrentCheckin(studentId)
+            If IsNothing(todayCheckin) Then
+                Dim courseAttendency = New CourseAttendency With {.StudentId = studentId, .CourseId = courseId, .CheckinDate = DateTime.Now}
+                repository.CheckInStudent(courseAttendency)
+                alreadyCheckedIn = False
+            End If
+
+        End Using
+        Return alreadyCheckedIn
+    End Function
 
 
 End Class

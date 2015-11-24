@@ -9,38 +9,20 @@
 
 Imports System
 Imports System.Collections.Generic
-Imports System.ComponentModel.DataAnnotations
 
 Partial Public Class Student
     Public Property Id As Integer
-    <Required>
-    <StringLength(50)>
-    <Display(Name:="First Name")>
     Public Property FirstName As String
-    <Required>
-    <StringLength(50)>
-    <Display(Name:="Last Name")>
     Public Property LastName As String
-    <Required>
-    <StringLength(150)>
     Public Property Address As String
-    <Required>
-    <StringLength(50)>
     Public Property City As String
-    <Required>
-    <Display(Name:="Date of birth")>
-    <DataType(DataType.Date)>
     Public Property DateBirth As Date
-
-    <StringLength(200)>
     Public Property Allergies As String
-
-    <StringLength(500)>
-    <Display(Name:="Special Instructions")>
     Public Property SpecialInstructions As String
-
+    Public Property CourseId As Nullable(Of Integer)
 
     Public Overridable Property CourseAttendencies As ICollection(Of CourseAttendency) = New HashSet(Of CourseAttendency)
     Public Overridable Property GuardianStudents As ICollection(Of GuardianStudent) = New HashSet(Of GuardianStudent)
+    Public Overridable Property Cours As Cours
 
 End Class

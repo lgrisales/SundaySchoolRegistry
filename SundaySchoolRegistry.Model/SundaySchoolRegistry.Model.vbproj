@@ -148,14 +148,17 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+    <None Include="packages.config" />
     <EntityDeploy Include="SundaySchoolRegistryModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>SundaySchoolRegistryModel.Designer.vb</LastGenOutput>
     </EntityDeploy>
-    <None Include="packages.config" />
     <None Include="SundaySchoolRegistryModel.edmx.diagram">
       <DependentUpon>SundaySchoolRegistryModel.edmx</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="SundaySchoolRegistryModel.Context.tt">
@@ -168,9 +171,6 @@
       <DependentUpon>SundaySchoolRegistryModel.edmx</DependentUpon>
       <LastGenOutput>SundaySchoolRegistryModel.vb</LastGenOutput>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

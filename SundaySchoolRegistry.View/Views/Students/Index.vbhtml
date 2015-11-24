@@ -3,7 +3,7 @@
 ViewData("Title") = "Index"
 End Code
 
-<h2>Index</h2>
+<h2>Students</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")

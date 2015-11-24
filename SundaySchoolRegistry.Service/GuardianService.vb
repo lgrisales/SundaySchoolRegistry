@@ -80,4 +80,20 @@ Public Class GuardianService
         Return guardians
     End Function
 
+
+    ''' <summary>
+    ''' Returns all Guardian types
+    ''' </summary>
+    ''' <returns>list of Guardian types</returns>
+    Public Function FindAllGuardianTypes() As IEnumerable
+        Dim guardianTypes As IEnumerable(Of GuardianType)
+
+        Using repository As New GuardianRepository()
+            guardianTypes = repository.FindAllGuardianTypes()
+        End Using
+
+        Return guardianTypes
+    End Function
+
+
 End Class

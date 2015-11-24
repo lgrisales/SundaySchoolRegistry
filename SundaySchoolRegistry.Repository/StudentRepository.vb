@@ -53,4 +53,41 @@ Public Class StudentRepository
         Return DBContext.Students.ToList()
     End Function
 
+    ''' <summary>
+    ''' Associates a guardian to a student
+    ''' </summary>
+    ''' <param name="guardianStudent">guardian information</param>
+    Public Sub AddGuardian(guardianStudent As GuardianStudent)
+        DBContext.GuardianStudents.Add(guardianStudent)
+        DBContext.SaveChanges()
+    End Sub
+
+    ''' <summary>
+    ''' Remove the relation between a guardian and an student
+    ''' </summary>
+    ''' <param name="guardianStudent">guardian student information</param>
+    Public Sub RemoveGuardian(guardianStudent As GuardianStudent)
+        guardianStudent = DBContext.GuardianStudents.Find(guardianStudent.GuardianId, guardianStudent.StudentId)
+        DBContext.GuardianStudents.Remove(guardianStudent)
+        DBContext.SaveChanges()
+    End Sub
+
+    ''' <summary>
+    ''' Returns the today's student checkin
+    ''' </summary>
+    ''' <param name="studentId"></param>
+    ''' <returns></returns>
+    Public Function GetCurrentCheckin(studentId As Integer) As CourseAttendency
+        Dim current = DBContext.CourseAttendencies.Where(Function(c) c.StudentId = studentId And DbFunctions.TruncateTime(c.CheckinDate) = DbFunctions.TruncateTime(DateTime.Now)).Single()
+        Return current
+    End Function
+
+    ''' <summary>
+    ''' Checks in the student in a course
+    ''' </summary>
+    ''' <param name="courseAttendency">checkin information</param>
+    Public Sub CheckInStudent(courseAttendency As CourseAttendency)
+        DBContext.CourseAttendencies.Add(courseAttendency)
+        DBContext.SaveChanges()
+    End Sub
 End Class

@@ -15,8 +15,8 @@ Partial Public Class GuardianStudent
     Public Property StudentId As Integer
     Public Property GuardianTypeId As Integer
 
+    Public Overridable Property Guardian As Guardian
     Public Overridable Property GuardianType As GuardianType
     Public Overridable Property Student As Student
-    Public Overridable Property Guardian As Guardian
 
 End Class
