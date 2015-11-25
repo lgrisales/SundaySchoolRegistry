@@ -21,7 +21,7 @@
           <Property Name="StudentId" Type="int" Nullable="false" />
           <Property Name="CourseId" Type="int" Nullable="false" />
           <Property Name="CheckinDate" Type="datetime" Nullable="false" />
-          <Property Name="CheckoutDate" Type="datetime" Nullable="false" />
+          <Property Name="CheckoutDate" Type="datetime" />
         </EntityType>
         <EntityType Name="Courses">
           <Key>
@@ -250,7 +250,7 @@
           <Property Name="StudentId" Type="Int32" Nullable="false" />
           <Property Name="CourseId" Type="Int32" Nullable="false" />
           <Property Name="CheckinDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CheckoutDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CheckoutDate" Type="DateTime" Nullable="true" Precision="3" />
           <NavigationProperty Name="Cours" Relationship="Self.FK_CourseAttendencies_Courses" FromRole="CourseAttendencies" ToRole="Courses" />
           <NavigationProperty Name="Student" Relationship="Self.FK_CourseAttendencies_Students" FromRole="CourseAttendencies" ToRole="Students" />
         </EntityType>

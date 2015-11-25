@@ -119,15 +119,16 @@ Public Class StudentService
     ''' Checks in the student in a course
     ''' </summary>
     ''' <param name="studentId">student id</param>
-    ''' <param name="courseId">course id</param>
     ''' <returns>true if the student is already checked in</returns>
-    Public Function CheckInStudent(studentId As Integer, courseId As Integer) As Boolean
+    Public Function CheckInStudent(studentId As Integer) As Boolean
         Dim alreadyCheckedIn = True
         Using repository As New StudentRepository
+            ' get the student information
+            Dim student = repository.Find(studentId)
             ' check if the student is already checked in
             Dim todayCheckin = repository.GetCurrentCheckin(studentId)
             If IsNothing(todayCheckin) Then
-                Dim courseAttendency = New CourseAttendency With {.StudentId = studentId, .CourseId = courseId, .CheckinDate = DateTime.Now}
+                Dim courseAttendency = New CourseAttendency With {.StudentId = studentId, .CourseId = student.CourseId, .CheckinDate = DateTime.Now}
                 repository.CheckInStudent(courseAttendency)
                 alreadyCheckedIn = False
             End If
@@ -136,5 +137,37 @@ Public Class StudentService
         Return alreadyCheckedIn
     End Function
 
+    ''' <summary>
+    ''' Gets the current student check in
+    ''' </summary>
+    ''' <param name="studentId"></param>
+    ''' <returns></returns>
+    Public Function GetCurrentCheckin(studentId As Integer) As CourseAttendency
+        Dim courseAttendency As CourseAttendency
+        Using repository As New StudentRepository
+            courseAttendency = repository.GetCurrentCheckin(studentId)
+        End Using
+        Return courseAttendency
+    End Function
+
+    ''' <summary>
+    ''' Checks out the student from a course
+    ''' </summary>
+    ''' <param name="studentId">student id</param>
+    ''' <returns>if the student was checked-in in a course</returns>
+    Public Function CheckoutStudent(studentId As Integer) As Boolean
+        Dim wasCheckedIn = False
+        Using repository As New StudentRepository
+            ' check if the student is already checked in
+            Dim todayCheckin = repository.GetCurrentCheckin(studentId)
+            If Not IsNothing(todayCheckin) Then
+                todayCheckin.CheckoutDate = DateTime.Now
+                repository.CheckOutStudent(todayCheckin)
+                wasCheckedIn = True
+            End If
+
+        End Using
+        Return wasCheckedIn
+    End Function
 
 End Class

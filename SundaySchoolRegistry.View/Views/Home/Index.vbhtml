@@ -4,7 +4,7 @@ End Code
 
 <div class="jumbotron">
     <h1>Sunday School Kids Registry</h1>
-    <p class="lead">Sed consequat magna dolor, a tempus urna congue at. Vestibulum mollis pellentesque lacus, vel maximus elit consectetur non.</p>
+    <p class="lead">Welcome.</p>
     <p><a href="#" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
 </div>
 
@@ -12,14 +12,14 @@ End Code
     <div class="col-md-4">
         <h2>Check-in</h2>
         <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu ligula ornare, efficitur justo et, suscipit turpis. 
+            Register a student in Sunday School. 
         </p>
-        <p><a class="btn btn-default" href="#">Next &raquo;</a></p>
+        <p><a class="btn btn-default" href="/CheckInout/CheckIn">Next &raquo;</a></p>
     </div>
     <div class="col-md-4">
         <h2>Check-out</h2>
-        <p>Pellentesque elementum augue sed risus porta tempus. Pellentesque gravida, quam nec elementum vulputate, velit massa iaculis ex.</p>
-        <p><a class="btn btn-default" href="#">Next &raquo;</a></p>
+        <p>Dismiss students from Sunday School.</p>
+        <p><a class="btn btn-default" href="/CheckInout/Checkout">Next &raquo;</a></p>
     </div>
     <div class="col-md-4">
         <h2>Register Student</h2>

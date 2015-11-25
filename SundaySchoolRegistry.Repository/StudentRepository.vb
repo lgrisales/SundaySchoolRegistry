@@ -78,8 +78,8 @@ Public Class StudentRepository
     ''' <param name="studentId"></param>
     ''' <returns></returns>
     Public Function GetCurrentCheckin(studentId As Integer) As CourseAttendency
-        Dim current = DBContext.CourseAttendencies.Where(Function(c) c.StudentId = studentId And DbFunctions.TruncateTime(c.CheckinDate) = DbFunctions.TruncateTime(DateTime.Now)).Single()
-        Return current
+        Dim current = From c In DBContext.CourseAttendencies Where DbFunctions.TruncateTime(c.CheckinDate) = DbFunctions.TruncateTime(DateTime.Now) And c.CheckoutDate Is Nothing
+        Return current.SingleOrDefault()
     End Function
 
     ''' <summary>
@@ -88,6 +88,15 @@ Public Class StudentRepository
     ''' <param name="courseAttendency">checkin information</param>
     Public Sub CheckInStudent(courseAttendency As CourseAttendency)
         DBContext.CourseAttendencies.Add(courseAttendency)
+        DBContext.SaveChanges()
+    End Sub
+
+    ''' <summary>
+    ''' Checks out the student from a course
+    ''' </summary>
+    ''' <param name="courseAttendency">checkout information</param>
+    Public Sub CheckOutStudent(courseAttendency As CourseAttendency)
+        DBContext.Entry(courseAttendency).State = EntityState.Modified
         DBContext.SaveChanges()
     End Sub
 End Class

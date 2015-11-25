@@ -9,14 +9,24 @@
 
 Imports System
 Imports System.Collections.Generic
+Imports System.ComponentModel.DataAnnotations
 
 Partial Public Class Guardian
     Public Property Id As Integer
+    <Required>
+    <StringLength(50)>
+    <Display(Name:="First Name")>
     Public Property FirstName As String
     Public Property LastName As String
     Public Property Address As String
     Public Property City As String
+    <Required>
+    <StringLength(50)>
+    <Display(Name:="Cell Number")>
     Public Property CellNumber As String
+    <Required>
+    <StringLength(50)>
+    <Display(Name:="Home Number")>
     Public Property HomeNumber As String
     Public Property Status As Integer
 

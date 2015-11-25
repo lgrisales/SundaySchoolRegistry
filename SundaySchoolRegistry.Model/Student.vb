@@ -9,15 +9,25 @@
 
 Imports System
 Imports System.Collections.Generic
+Imports System.ComponentModel.DataAnnotations
 
 Partial Public Class Student
     Public Property Id As Integer
+    <Required>
+    <StringLength(50)>
+    <Display(Name:="First Name")>
     Public Property FirstName As String
     Public Property LastName As String
     Public Property Address As String
     Public Property City As String
+    <Required>
+    <DataType(DataType.Date)>
+    <Display(Name:="Date of Birth")>
     Public Property DateBirth As Date
     Public Property Allergies As String
+    <Required>
+    <StringLength(500)>
+    <Display(Name:="Special Instructions")>
     Public Property SpecialInstructions As String
     Public Property CourseId As Nullable(Of Integer)
 

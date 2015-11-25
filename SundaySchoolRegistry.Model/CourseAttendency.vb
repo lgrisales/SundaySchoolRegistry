@@ -15,7 +15,7 @@ Partial Public Class CourseAttendency
     Public Property StudentId As Integer
     Public Property CourseId As Integer
     Public Property CheckinDate As Date
-    Public Property CheckoutDate As Date
+    Public Property CheckoutDate As Nullable(Of Date)
 
     Public Overridable Property Cours As Cours
     Public Overridable Property Student As Student

@@ -309,6 +309,9 @@
     <Content Include="Views\Students\AddGuardian.vbhtml" />
     <Content Include="Views\Courses\AddStudents.vbhtml" />
     <Content Include="Views\CheckInOut\Checkin.vbhtml" />
+    <Content Include="Views\CheckInOut\CheckInSummary.vbhtml" />
+    <Content Include="Views\CheckInOut\Print.vbhtml" />
+    <Content Include="Views\CheckInOut\Checkout.vbhtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
